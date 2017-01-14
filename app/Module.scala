@@ -1,9 +1,11 @@
 import com.google.inject.AbstractModule
 import java.time.Clock
+import javax.inject.Provider
 
+import io.{DefaultProcessLogger, TestableProcessLogger}
 import services.{ApplicationTimer, AtomicCounter, Counter}
 
-import scala.sys.process.ProcessCreation
+import scala.sys.process.{ProcessCreation, ProcessLogger}
 
 /**
  * This class is a Guice module that tells Guice how to bind several
@@ -27,6 +29,10 @@ class Module extends AbstractModule {
     bind(classOf[Counter]).to(classOf[AtomicCounter])
 
     bind(classOf[ProcessCreation]).toInstance(scala.sys.process.Process)
+    bind(classOf[TestableProcessLogger]).toProvider(new Provider[TestableProcessLogger] {
+      override def get(): TestableProcessLogger = new DefaultProcessLogger
+    })
+
   }
 
 }

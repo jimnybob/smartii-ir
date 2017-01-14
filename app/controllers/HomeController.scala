@@ -29,7 +29,7 @@ class HomeController @Inject()(lircParser: LircParser) extends Controller {
   def listDevices: Action[AnyContent] = Action {
 
     Try { lircParser.listDevices } match {
-      case Success(devices) => Ok(Json.toJson(devices))
+      case Success(devices) => println(devices); Ok(Json.toJson(devices))
       case Failure(error) => InternalServerError(Json.toJson(s"Error listing devices: $error"))
     }
   }
@@ -37,7 +37,7 @@ class HomeController @Inject()(lircParser: LircParser) extends Controller {
   def listButtons(device: String): Action[AnyContent] = Action {
 
     Try { lircParser.listButtons(device) } match {
-      case Success(buttons) => Ok(Json.toJson(buttons))
+      case Success(buttons) => println(buttons); Ok(Json.toJson(buttons))
       case Failure(error) => InternalServerError(Json.toJson(s"Error listing buttons for '$device': $error"))
     }
   }
