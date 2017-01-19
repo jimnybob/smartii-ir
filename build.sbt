@@ -2,9 +2,9 @@ enablePlugins(PlayScala)
 
 name := """smartii-ir"""
 
-version := "1.0-SNAPSHOT"
+organization := "uk.co.smartii"
 
-//lazy val root = (project in file(".")).enablePlugins(PlayScala)
+version := "1.0.0-SNAPSHOT"
 
 scalaVersion := "2.11.8"
 
@@ -12,6 +12,8 @@ libraryDependencies ++= Seq(
   jdbc,
   cache,
   ws,
+  "org.typelevel" %% "cats" % "0.8.1",
+  "commons-net"    % "commons-net" % "3.5",
   "org.scalatestplus.play" %% "scalatestplus-play" % "1.5.1" % Test,
   "org.scalamock" %% "scalamock-scalatest-support" % "3.2.2" % Test
 )
@@ -31,4 +33,19 @@ assemblyMergeStrategy in assembly := {
   case PathList("play", "core", "server", "ServerWithStop.class") => MergeStrategy.first
   case x if x.endsWith("io.netty.versions.properties") => MergeStrategy.first
   case other => (assemblyMergeStrategy in assembly).value(other)
+}
+
+artifact in (Compile, assembly) := {
+  val art = (artifact in (Compile, assembly)).value
+  art.copy(`classifier` = Some("assembly"))
+}
+
+addArtifact(artifact in (Compile, assembly), assembly)
+
+publishTo := {
+  val nexus = "http://repo.smartii.co.uk:8081/nexus/content/repositories"
+  if (isSnapshot.value)
+    Some("snapshots" at nexus + "/snapshots")
+  else
+    Some("releases"  at nexus + "/releases")
 }

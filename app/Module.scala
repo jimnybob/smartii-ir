@@ -3,7 +3,7 @@ import java.time.Clock
 import javax.inject.Provider
 
 import io.{DefaultProcessLogger, TestableProcessLogger}
-import services.{ApplicationTimer, AtomicCounter, Counter}
+import services._
 
 import scala.sys.process.{ProcessCreation, ProcessLogger}
 
@@ -32,7 +32,7 @@ class Module extends AbstractModule {
     bind(classOf[TestableProcessLogger]).toProvider(new Provider[TestableProcessLogger] {
       override def get(): TestableProcessLogger = new DefaultProcessLogger
     })
-
+    bind(classOf[LircParser]).to(classOf[DefaultLircParser])
   }
 
 }

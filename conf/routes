@@ -8,10 +8,5 @@ GET         /ir                     controllers.HomeController.listDevices
 GET         /ir/:device             controllers.HomeController.listButtons(device: String)
 GET         /ir/:device/:button     controllers.HomeController.pressButton(device: String, button: String)
 
-# An example controller showing how to use dependency injection
-GET     /count                      controllers.CountController.count
-# An example controller showing how to write asynchronous code
-GET     /message                    controllers.AsyncController.message
-
 # Map static resources from the /public folder to the /assets URL path
 GET     /assets/*file               controllers.Assets.versioned(path="/public", file: Asset)

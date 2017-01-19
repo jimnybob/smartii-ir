@@ -2,11 +2,13 @@ package controllers
 
 import javax.inject._
 
+import auth.AuthenticatedAction
 import play.api._
 import play.api.libs.json.Json
 import play.api.mvc._
 import services.LircParser
 
+import scala.concurrent.Future
 import scala.util.{Failure, Success, Try}
 
 /**
@@ -14,7 +16,7 @@ import scala.util.{Failure, Success, Try}
  * application's home page.
  */
 @Singleton
-class HomeController @Inject()(lircParser: LircParser) extends Controller {
+class HomeController @Inject()(configuration: Configuration, lircParser: LircParser) extends Controller {
 
   /**
    * Create an Action to render an HTML page with a welcome message.
@@ -26,7 +28,7 @@ class HomeController @Inject()(lircParser: LircParser) extends Controller {
     Ok(views.html.index("Your new application is ready."))
   }
 
-  def listDevices: Action[AnyContent] = Action {
+  def listDevices: Action[AnyContent] = AuthenticatedAction(configuration) {
 
     Try { lircParser.listDevices } match {
       case Success(devices) => println(devices); Ok(Json.toJson(devices))
@@ -34,7 +36,7 @@ class HomeController @Inject()(lircParser: LircParser) extends Controller {
     }
   }
 
-  def listButtons(device: String): Action[AnyContent] = Action {
+  def listButtons(device: String): Action[AnyContent] = AuthenticatedAction(configuration) {
 
     Try { lircParser.listButtons(device) } match {
       case Success(buttons) => println(buttons); Ok(Json.toJson(buttons))
@@ -42,7 +44,7 @@ class HomeController @Inject()(lircParser: LircParser) extends Controller {
     }
   }
 
-  def pressButton(device: String, button: String): Action[AnyContent] = Action {
+  def pressButton(device: String, button: String): Action[AnyContent] = AuthenticatedAction(configuration) {
 
     Try { lircParser.pressButton(device, button) } match {
       case Success(true) =>  Ok(Json.toJson("Success"))

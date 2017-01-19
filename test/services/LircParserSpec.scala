@@ -26,7 +26,7 @@ class LircParserSpec extends FlatSpec with MustMatchers with MockFactory {
     (provider.get _).expects().returns(logger)
     (builder.lineStream_! (_: ProcessLogger)).expects(*)
 
-    val lircParser = new LircParser(process, provider)
+    val lircParser = new DefaultLircParser(process, provider)
     lircParser.listDevices must be(Seq("sony", "jvc"))
   }
 
@@ -43,7 +43,7 @@ class LircParserSpec extends FlatSpec with MustMatchers with MockFactory {
     (provider.get _).expects().returns(logger)
     (builder.lineStream_! (_:ProcessLogger)).expects(*)
 
-    val lircParser = new LircParser(process, provider)
+    val lircParser = new DefaultLircParser(process, provider)
     lircParser.listButtons("sony") must be(Seq("KEY_VOLUMEUP", "KEY_VOLUMEDOWN"))
   }
 
@@ -57,7 +57,7 @@ class LircParserSpec extends FlatSpec with MustMatchers with MockFactory {
     (process.apply(_:String,_:Seq[String])).expects("irsend", Seq("SEND_ONCE", "sony", "KEY_VOLUMEUP")).returns(builder)
     (builder.! _).expects().returns(0)
 
-    val lircParser = new LircParser(process, null)
+    val lircParser = new DefaultLircParser(process, null)
     lircParser.pressButton("sony", "KEY_VOLUMEUP") must be(true)
   }
 }

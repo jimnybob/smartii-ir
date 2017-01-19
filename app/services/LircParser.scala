@@ -2,18 +2,26 @@ package services
 
 import javax.inject.{Inject, Provider, Singleton}
 
+import com.google.inject.ImplementedBy
 import io.TestableProcessLogger
 
 import scala.collection.mutable.ListBuffer
 import scala.sys.process._
 
+trait LircParser {
+
+  def listDevices: Seq[String]
+  def listButtons(device: String): Seq[String]
+  def pressButton(device: String, button: String): Boolean
+}
+
 /**
   * Created by jimbo on 02/01/17.
   */
 @Singleton
-class LircParser @Inject()(process: ProcessCreation, processLoggerProvider: Provider[TestableProcessLogger]) {
+class DefaultLircParser @Inject()(process: ProcessCreation, processLoggerProvider: Provider[TestableProcessLogger]) extends LircParser {
 
-  def listDevices: Seq[String] = {
+  override def listDevices: Seq[String] = {
 
     val processLogger = processLoggerProvider.get()
     // Get 2nd column of irsend list
@@ -21,7 +29,7 @@ class LircParser @Inject()(process: ProcessCreation, processLoggerProvider: Prov
     processLogger.lines.map(_.split(" ").apply(1))
   }
 
-  def listButtons(device: String): Seq[String] = {
+  override def listButtons(device: String): Seq[String] = {
 
     val processLogger = processLoggerProvider.get()
     // Get 3rd column of irsend list
@@ -35,7 +43,7 @@ class LircParser @Inject()(process: ProcessCreation, processLoggerProvider: Prov
     * @param button
     * @return true if success exit code
     */
-  def pressButton(device: String, button: String): Boolean = {
+  override def pressButton(device: String, button: String): Boolean = {
     process("irsend", Seq("SEND_ONCE", device, button)).! == 0
   }
 }
