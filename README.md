@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/jimnybob/smartii-ir.svg?branch=master)](https://travis-ci.org/jimnybob/smartii-ir)
+
 # smartii-ir
 Play app to control lirc from raspberry pi
 
