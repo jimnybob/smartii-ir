@@ -16,7 +16,7 @@ import scala.util.{Failure, Success, Try}
  * application's home page.
  */
 @Singleton
-class HomeController @Inject()(configuration: Configuration, lircParser: LircParser) extends Controller {
+class HomeController @Inject()(configuration: Configuration, environment: Environment, lircParser: LircParser) extends Controller {
 
   /**
    * Create an Action to render an HTML page with a welcome message.
@@ -28,23 +28,23 @@ class HomeController @Inject()(configuration: Configuration, lircParser: LircPar
     Ok(views.html.index("Your new application is ready."))
   }
 
-  def listDevices: Action[AnyContent] = AuthenticatedAction(configuration) {
+  def listDevices: Action[AnyContent] = AuthenticatedAction(configuration, environment) {
 
     Try { lircParser.listDevices } match {
-      case Success(devices) => println(devices); Ok(Json.toJson(devices))
+      case Success(devices) => Ok(Json.toJson(devices))
       case Failure(error) => InternalServerError(Json.toJson(s"Error listing devices: $error"))
     }
   }
 
-  def listButtons(device: String): Action[AnyContent] = AuthenticatedAction(configuration) {
+  def listButtons(device: String): Action[AnyContent] = AuthenticatedAction(configuration, environment) {
 
     Try { lircParser.listButtons(device) } match {
-      case Success(buttons) => println(buttons); Ok(Json.toJson(buttons))
+      case Success(buttons) => Ok(Json.toJson(buttons))
       case Failure(error) => InternalServerError(Json.toJson(s"Error listing buttons for '$device': $error"))
     }
   }
 
-  def pressButton(device: String, button: String): Action[AnyContent] = AuthenticatedAction(configuration) {
+  def pressButton(device: String, button: String): Action[AnyContent] = AuthenticatedAction(configuration, environment) {
 
     Try { lircParser.pressButton(device, button) } match {
       case Success(true) =>  Ok(Json.toJson("Success"))
