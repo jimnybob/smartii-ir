@@ -7,6 +7,7 @@ GET     /                           controllers.HomeController.index
 GET         /ir                     controllers.HomeController.listDevices
 GET         /ir/:device             controllers.HomeController.listButtons(device: String)
 GET         /ir/:device/:button     controllers.HomeController.pressButton(device: String, button: String)
+POST        /irSequence             controllers.HomeController.sequence
 
 # Map static resources from the /public folder to the /assets URL path
 GET     /assets/*file               controllers.Assets.versioned(path="/public", file: Asset)

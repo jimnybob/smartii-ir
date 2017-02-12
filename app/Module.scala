@@ -2,7 +2,10 @@ import com.google.inject.AbstractModule
 import java.time.Clock
 import javax.inject.Provider
 
+import akka.actor.ActorSystem
+import akka.stream.ActorMaterializer
 import io.{DefaultProcessLogger, TestableProcessLogger}
+import play.api.libs.concurrent.AkkaGuiceSupport
 import services._
 
 import scala.sys.process.{ProcessCreation, ProcessLogger}
@@ -17,7 +20,7 @@ import scala.sys.process.{ProcessCreation, ProcessLogger}
  * adding `play.modules.enabled` settings to the `application.conf`
  * configuration file.
  */
-class Module extends AbstractModule {
+class Module extends AbstractModule with AkkaGuiceSupport {
 
   override def configure() = {
 

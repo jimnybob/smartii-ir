@@ -8,6 +8,8 @@ version := "1.0.0-SNAPSHOT"
 
 scalaVersion := "2.11.8"
 
+val akkaVersion = "2.4.12"
+
 libraryDependencies ++= Seq(
   jdbc,
   cache,
@@ -15,7 +17,8 @@ libraryDependencies ++= Seq(
   "org.typelevel" %% "cats" % "0.8.1",
   "commons-net"    % "commons-net" % "3.5",
   "org.scalatestplus.play" %% "scalatestplus-play" % "1.5.1" % Test,
-  "org.scalamock" %% "scalamock-scalatest-support" % "3.2.2" % Test
+  "org.scalamock" %% "scalamock-scalatest-support" % "3.2.2" % Test,
+  "com.typesafe.akka"            %% "akka-testkit" % akkaVersion % Test
 )
 
 mainClass in assembly := Some("play.core.server.ProdServerStart")
