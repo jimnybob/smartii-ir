@@ -65,7 +65,7 @@ class HomeController @Inject()(configuration: Configuration,
     request.body.asJson.fold(Future.successful(BadRequest("Expected JSON in request body"))) { json =>
       json.validate[Seq[HttpCall]] match {
         case JsSuccess(httpCalls, _) => actionCaller.call(httpCalls.map(httpCall => httpCall.copy(path = "http://" + request.host + httpCall.path))).map {
-          case true => Ok("")
+          case true => Ok(Json.toJson("Success"))
           case false => InternalServerError("Error calling actions")
         }
         case JsError(err) => Future.successful(BadRequest(s"Couldn't parse JSON body: $err"))

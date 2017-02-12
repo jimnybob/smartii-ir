@@ -36,7 +36,7 @@ class ActionCallerSpec extends TestKit(ActorSystem("InfraRedServiceSpec", Config
 
     val ws = mock[WSClient]
 
-    val actionCaller = new ActionCaller(ws, system)
+    val actionCaller = new DefaultActionCaller(ws, system)
 
     val actions = Seq(HttpCall(method = "GET", path = "/jvc/AUX", order = 0), HttpCall(method = "GET", path = "/jvc/OFF", order = 1, delay = Some(Delay(3, TimeUnit.SECONDS))))
 

@@ -14,9 +14,13 @@ import scala.concurrent.ExecutionContext.Implicits.global
 /**
   * Created by jimbo on 09/02/17.
   */
+trait ActionCaller {
+  def call(httpCalls: Seq[HttpCall]): Future[Boolean]
+}
+
 @Singleton
-class ActionCaller @Inject()(wsClient: WSClient,
-                             system: ActorSystem) {
+class DefaultActionCaller @Inject()(wsClient: WSClient,
+                             system: ActorSystem) extends ActionCaller {
 
   implicit val implicitSystem = system
 
@@ -32,7 +36,7 @@ class ActionCaller @Inject()(wsClient: WSClient,
   private def httpFutureCall(httpCall: HttpCall) = {
 
     val url = wsClient.url(httpCall.path)
-    println("Calling: " + httpCall.path)
+
     httpCall.method.toUpperCase match {
       case "GET" =>  url.get()
       case "POST" => url.post(JsString(""))

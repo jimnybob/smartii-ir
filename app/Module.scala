@@ -29,6 +29,7 @@ class Module extends AbstractModule with AkkaGuiceSupport {
       override def get(): TestableProcessLogger = new DefaultProcessLogger
     })
     bind(classOf[LircParser]).to(classOf[DefaultLircParser])
+    bind(classOf[ActionCaller]).to(classOf[DefaultActionCaller])
   }
 
 }
